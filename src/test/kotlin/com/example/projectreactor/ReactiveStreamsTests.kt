@@ -15,7 +15,9 @@ internal class ReactiveStreamsTests : DescribeSpec({
                 { errorConsumer -> println(errorConsumer) },
                 { println("subscription is completed") })
         }
+    }
 
+    describe("from 메서드") {
         it("Mono.from(Flux) 테스트") {
             // given
             val flux: Flux<String> = Flux.just("A", "B", "C", "D", "E").log()
@@ -25,6 +27,28 @@ internal class ReactiveStreamsTests : DescribeSpec({
 
             // then
             mono.subscribe { consumer -> println("consumer: $consumer") }
+        }
+
+        it("Flux.from(Flux) 테스트") {
+            // given
+            val flux: Flux<String> = Flux.just("A", "B", "C", "D", "E").log()
+
+            // when
+            val newFlux: Flux<String> = Flux.from(flux).map { data -> return@map Receiver.send(data = data) }
+
+            // then
+            newFlux.subscribe { consumer -> println("consumer: $consumer") }
+        }
+
+        it("Flux.from(Mono) 테스트") {
+            // given
+            val mono: Mono<String> = Mono.just("A").log()
+
+            // when
+            val flux: Flux<String> = Flux.from(mono).map { data -> return@map Receiver.send(data = data) }
+
+            // then
+            flux.subscribe { consumer -> println("consumer: $consumer") }
         }
     }
 })

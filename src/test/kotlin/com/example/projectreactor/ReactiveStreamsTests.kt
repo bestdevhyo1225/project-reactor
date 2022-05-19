@@ -1,5 +1,6 @@
 package com.example.projectreactor
 
+import com.example.projectreactor.mono.Receiver
 import io.kotest.core.spec.style.DescribeSpec
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
@@ -20,7 +21,7 @@ internal class ReactiveStreamsTests : DescribeSpec({
             val flux: Flux<String> = Flux.just("A", "B", "C", "D", "E").log()
 
             // when
-            val mono: Mono<String> = Mono.from(flux).map { data -> data.lowercase() }
+            val mono: Mono<String> = Mono.from(flux).map { data -> return@map Receiver.send(data = data) }
 
             // then
             mono.subscribe { consumer -> println("consumer: $consumer") }

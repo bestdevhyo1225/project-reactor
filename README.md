@@ -1,1 +1,1 @@
-# Reactive Streams, Reactor 테스트 Repository
+# Reactive Streams, Project Reactor 테스트 저장소

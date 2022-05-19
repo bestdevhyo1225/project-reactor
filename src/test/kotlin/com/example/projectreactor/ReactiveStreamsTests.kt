@@ -2,7 +2,6 @@ package com.example.projectreactor
 
 import com.example.projectreactor.mono.Receiver
 import io.kotest.core.spec.style.DescribeSpec
-import io.kotest.matchers.shouldBe
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 
@@ -14,8 +13,8 @@ internal class ReactiveStreamsTests : DescribeSpec({
             val flux: Flux<String> = Flux.just(*array).log()
 
             flux.subscribe({ consumer -> println("consumer: $consumer") },
-                { errorConsumer -> println(errorConsumer) },
-                { println("subscription is completed") })
+                    { errorConsumer -> println(errorConsumer) },
+                    { println("subscription is completed") })
         }
     }
 

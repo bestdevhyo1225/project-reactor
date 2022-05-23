@@ -1,6 +1,7 @@
 package com.example.projectreactor
 
 import io.kotest.core.spec.style.DescribeSpec
+import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 
 internal class FlatMapAndMapTests : DescribeSpec({
@@ -27,6 +28,13 @@ internal class FlatMapAndMapTests : DescribeSpec({
                 }
             }
         }
+
+        it("문자열 변환 테스트") {
+            Flux.just("a", "bc", "def", "ghij")
+                .log()
+                .map { it.length }
+                .subscribe { consumer -> println("consumer = $consumer") }
+        }
     }
 
     describe("flatMap 메서드는") {
@@ -38,6 +46,24 @@ internal class FlatMapAndMapTests : DescribeSpec({
 
                 monoResult.subscribe { consumer -> println("consumer = $consumer") }
             }
+        }
+
+        it("Flux<Int> -> Flux<Int> 변환 테스트") {
+            Flux.just(1, 2, 3)
+                .flatMap {
+                    println("----- flatMap -----")
+                    Flux.range(1, it)
+                }
+                .subscribe { consumer -> println("consumer = $consumer") }
+        }
+
+        it("Flux<Int> -> Mono<Int> 변환 테스트") {
+            Flux.just(1, 2, 3)
+                .flatMap {
+                    println("----- flatMap -----")
+                    Mono.just(it * 2)
+                }
+                .subscribe { consumer -> println("consumer = $consumer") }
         }
     }
 })
